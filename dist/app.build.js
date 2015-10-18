@@ -20263,42 +20263,115 @@ module.exports = function(listenables){
 
 },{"reflux-core/lib/ListenerMethods":4}]},{},[17])(17)
 });
+(function(Reflux, global) {
+	
+	'use strict';
+
+	global.CounterActions = Reflux.createActions([
+		'addToCounterValue'
+	]);
+
+})(window.Reflux, window);
+(function(Reflux, CounterActions, global) {
+	
+	'use strict';
+
+	var localStorageKey = 'counter';
+
+	function getItemByKey(list, itemKey) {
+		return _.find(list, function(item) {
+			return item.key === itemKey;
+		});
+	}
+
+	global.CounterStore = Reflux.createStore({
+		listenables: [CounterActions],
+		onAddToCounterValue: function(addToCounter) {
+			this.counter += addToCounter;
+			localStorage.setItem(localStorageKey, this.counter);
+			this.updateCounter();
+		},
+		removeItem: function() {
+			this.counter--;
+			localStorage.setItem(localStorageKey, this.counter);
+			this.updateCounter();
+		},
+		updateCounter: function() {
+			this.trigger(this.counter);
+		},
+		getInitialState: function() {
+			this.counter = parseInt(localStorage.getItem(localStorageKey));
+			if (isNaN(this.counter) || this.counter == undefined) {
+				this.counter = 0;
+			}
+			return this.counter;
+		}
+	});
+
+})(window.Reflux, window.CounterActions, window);
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
-var ChildBox = require('./child-box');
+(function (React, Reflux, CounterActions, CounterStore) {
 
-var BoxContainer = React.createClass({
-    displayName: "BoxContainer",
+	var ChildComponent = require('./child-component');
 
-    render: function render() {
-        return React.createElement(
-            "div",
-            { className: "box" },
-            "Hello, world! I am a Box.",
-            React.createElement(ChildBox, null)
-        );
-    }
-});
+	var BoxContainer = React.createClass({
+		displayName: "BoxContainer",
 
-module.exports = BoxContainer;
+		mixins: [Reflux.connect(CounterStore, "counter")],
+		getInitialState: function getInitialState() {},
+		render: function render() {
+			function handleClick(addToCounter) {
+				CounterActions.addToCounterValue(addToCounter);
+			};
+			return React.createElement(
+				"div",
+				{ className: "box" },
+				React.createElement(
+					"h2",
+					null,
+					"Counter: ",
+					this.state.counter
+				),
+				React.createElement(
+					"button",
+					{ onClick: handleClick.bind(this, 1) },
+					"+"
+				),
+				React.createElement(
+					"button",
+					{ onClick: handleClick.bind(this, -1) },
+					"-"
+				),
+				React.createElement("hr", null),
+				React.createElement(ChildComponent, null)
+			);
+		}
+	});
 
-},{"./child-box":2}],2:[function(require,module,exports){
+	module.exports = BoxContainer;
+})(window.React, window.Reflux, window.CounterActions, window.CounterStore);
+
+},{"./child-component":2}],2:[function(require,module,exports){
 "use strict";
 
-var ChildBox = React.createClass({
-    displayName: "ChildBox",
+(function (React) {
 
-    render: function render() {
-        return React.createElement(
-            "div",
-            null,
-            "Hi, I am just a child box."
-        );
-    }
-});
+	var ChildComponent = React.createClass({
+		displayName: "ChildComponent",
 
-module.exports = ChildBox;
+		render: function render() {
+			return React.createElement(
+				"div",
+				null,
+				"Hi, I am just a Child Component."
+			);
+		}
+	});
+
+	module.exports = ChildComponent;
+})(window.React);
 
 },{}],3:[function(require,module,exports){
 'use strict';

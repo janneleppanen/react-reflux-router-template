@@ -16,7 +16,9 @@ var paths = {
         src:    [
             'bower_components/react/react.js',
             'bower_components/react/react-dom.js',
-            'bower_components/reflux/dist/reflux.js'
+            'bower_components/reflux/dist/reflux.js',
+            'js/actions.js',
+            'js/store.js'
         ]
     }
 };
