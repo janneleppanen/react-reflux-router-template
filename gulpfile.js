@@ -15,7 +15,8 @@ var paths = {
         compiledFile: 'app.build.js',
         src:    [
             'bower_components/react/react.js',
-            'bower_components/react/react-dom.js'
+            'bower_components/react/react-dom.js',
+            'bower_components/reflux/dist/reflux.js'
         ]
     }
 };
