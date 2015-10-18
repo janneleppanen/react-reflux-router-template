@@ -2,6 +2,7 @@ var gulp        = require('gulp');
 var sourcemaps  = require('gulp-sourcemaps');
 var addsrc      = require('gulp-add-src');
 var concat      = require('gulp-concat');
+var uglify      = require('gulp-uglify');
 var browserify  = require('browserify');
 var babelify    = require('babelify');
 var source      = require('vinyl-source-stream');
@@ -41,6 +42,14 @@ gulp.task('scripts', function() {
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(paths.js.compileTo));
 });
+
+gulp.task('compress.js', function() {
+    var src = paths.js.compileTo + '/' + paths.js.compiledFile;
+    
+    return gulp.src(src)
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.js.compileTo));
+})
 
 gulp.task('watch', function() {
     gulp.watch(paths.js.files, ['scripts']);
