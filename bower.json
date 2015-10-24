@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "react": "~0.14.0",
-    "reflux": "~0.3.0"
+    "reflux": "~0.3.0",
+    "react-router": "~0.13.4"
   }
 }

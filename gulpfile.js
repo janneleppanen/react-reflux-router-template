@@ -12,12 +12,13 @@ var paths = {
     js: {
         files:        'js/**/*.js',
         main:         'js/components/main.js',
-        compileTo:    'dist',
+        compileTo:    'build',
         compiledFile: 'app.build.js',
         src:    [
-            'bower_components/react/react.js',
-            'bower_components/react/react-dom.js',
-            'bower_components/reflux/dist/reflux.js',
+            'bower_components/react/react.min.js',
+            'bower_components/react/react-dom.min.js',
+            'bower_components/reflux/dist/reflux.min.js',
+            'bower_components/react-router/build/umd/ReactRouter.min.js',
             'js/actions.js',
             'js/store.js'
         ]
